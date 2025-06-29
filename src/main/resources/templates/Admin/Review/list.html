@@ -1,0 +1,79 @@
+<body th:fragment="content">
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Quản lý đánh giá</h1>
+        <div class="card shadow mb-4">  
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Danh sách đánh giá</h6>
+                <a th:href="@{'/admin/review/create'}" class="btn btn-primary btn-sm">Thêm đánh giá</a>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="/admin/review" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="storeFilter" class="form-label">Cửa hàng</label>
+                            <select class="form-control" id="storeFilter" name="storeId">
+                                <option value="" th:selected="${storeId == ''}">Tất cả</option>
+                                <option th:each="stored : ${stores}" th:value="${stored.id}" th:text="${stored.name}" th:selected="${stored.id == storeId}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ratingFilter" class="form-label">Đánh giá</label>
+                            <select class="form-control" id="ratingFilter" name="rating">
+                                <option value="" th:selected="${rating == ''}">Tất cả</option>
+                                <option th:each="r : ${#numbers.sequence(1, 5)}" th:value="${r}" th:text="${r}" th:selected="${r == rating}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary btn-block">Lọc</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Người dùng</th>
+                                <th scope="col">Cửa hàng</th>
+                                <th scope="col">Đánh giá</th>
+                                <th scope="col">Bình luận</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr th:each="review : ${reviews}">
+                                <td th:text="${review.id}"></td>
+                                <td th:text="${review.user.fullname}"></td>
+                                <td th:text="${review.store.name}"></td>
+                                <td>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating)}"></i>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div th:if="${#strings.length(review.comment) > 50}" th:title="${review.comment}">
+                                        <span th:text="${#strings.substring(review.comment, 0, 50)} + '...'"></span>
+                                    </div>
+                                    <div th:unless="${#strings.length(review.comment) > 50}" th:text="${review.comment}"></div>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/admin/review/' + ${review.id} + '/edit'}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{'/admin/review/' + ${review.id} + '/delete'}" class="btn btn-danger btn-sm" 
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>           
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${reviews.isEmpty()}">
+                        <p class="text-center text-muted">Không có dữ liệu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

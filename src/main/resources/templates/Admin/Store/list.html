@@ -1,0 +1,53 @@
+<div th:fragment="content" class="row">
+    <div class="col-lg-12">
+        <h1>Quản lý cửa hàng</h1>
+        <div class="heading_table">
+            <a th:href="@{'/admin/store/create'}" class="btn btn-primary me-2"
+           data-bs-toggle="tooltip" title="Chỉnh sửa">
+            <i class="bi bi-pencil-square"></i>
+            Thêm
+        </a>
+        </div>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên cửa hàng</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr th:each="store, iterStat : ${stores}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${store.name}"></td>
+                <td th:text="${store.address}"></td>
+                <td th:text="${store.phone}"></td>
+                <td th:text="${store.email}"></td>
+                <td>
+                    <img th:src="${store.image}" alt="image" style="width: 100px; height: 100px;">
+                </td>
+                <td th:text="${#temporals.format(store.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <a th:href="@{'/admin/store/edit/' + ${store.id}}" class="btn btn-warning me-2"
+                       data-bs-toggle="tooltip" title="Chỉnh sửa">
+                        <i class="bi bi-pencil-square"></i>
+                        Sửa
+                    </a>
+                    <a href="#" class="btn btn-danger"
+                       th:onclick="'if(confirm(\'Bạn có chắc chắn muốn xóa cửa hàng này?\')) { window.location.href=\'' + @{'/admin/store/delete/' + ${store.id}} + '\' }'"
+                       data-bs-toggle="tooltip" title="Xóa">
+                        <i class="bi bi-trash"></i>
+                        Xoá
+                    </a>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

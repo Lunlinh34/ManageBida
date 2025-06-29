@@ -1,0 +1,100 @@
+<div th:fragment="content" class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg rounded-3 border-0">
+                <div class="card-header bg-gradient-primary text-white border-0 py-3">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0 fw-bold"><i class="fas fa-chart-line me-2"></i>Quản lý doanh thu</h3>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-light text-dark p-2">
+                                <i class="fas fa-coins me-1"></i>Tổng doanh thu: 
+                                <span class="text-success fw-bold" 
+                                    th:with="total=${#aggregates.sum(revenues.![totalPrice])}"
+                                    th:text="${#numbers.formatDecimal(total != null ? total : 0, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row mb-4 bg-light p-3 rounded-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold" for="startDate"><i class="fas fa-calendar-alt me-1"></i>Từ ngày:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-primary text-white"><i class="fas fa-calendar"></i></span>
+                                    <input type="date" id="startDate" class="form-control border-primary" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold" for="endDate"><i class="fas fa-calendar-alt me-1"></i>Đến ngày:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-primary text-white"><i class="fas fa-calendar"></i></span>
+                                    <input type="date" id="endDate" class="form-control border-primary" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-primary px-4 py-2 shadow-sm" onclick="filterRevenue()">
+                                <i class="fas fa-filter me-2"></i>Lọc doanh thu
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-hover border">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th scope="col" class="text-center border-end">#</th>
+                                    <th scope="col" class="border-end">Doanh thu</th>
+                                    <th scope="col">Ngày tạo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="revenue, iterStat : ${revenues}">
+                                    <td class="text-center border-end" th:text="${iterStat.count}"></td>
+                                    <td class="border-end">
+                                        <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(revenue.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark">
+                                            <i class="far fa-clock me-1"></i>
+                                            <span th:text="${#temporals.format(revenue.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(revenues)}">
+                                    <td colspan="3" class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="fas fa-info-circle me-2"></i>Không có dữ liệu doanh thu trong khoảng thời gian này
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function filterRevenue() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert('Vui lòng chọn khoảng thời gian');
+                return;
+            }
+            
+            window.location.href = `/admin/revenue/filter?startDate=${startDate}&endDate=${endDate}`;
+        }
+    </script>
+</div>
+</div>

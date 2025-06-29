@@ -1,0 +1,79 @@
+<body th:fragment="content" xmlns="http://www.w3.org/1999/html">
+    <h3>
+        Tạo đặt bàn
+    </h3>
+    <div class="text-success">
+        <hr>
+    </div>
+
+    <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">
+    </div>
+
+    <form class="row g-3 needs-validation" novalidate action="/admin/reservation/create" method="POST">
+        <div class="col-md-4">
+            <label for="user" class="form-label">Tên Khách Hàng</label>
+            <select name="user" class="form-select" id="user" required>
+                <option th:each="user : ${users}" th:value="${user.id}"
+                    th:text="${user.username + ' - ' + user.phoneNumber}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn tên khách hàng!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="phone" class="form-label">Tên Bàn</label>
+            <select name="table" class="form-select" id="table" required>
+                <option th:each="table : ${tables}" th:value="${table.id}" th:text="${table.name}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn tên bàn!</div>
+        </div>
+        <div class="col-md-4">
+            <label for="status" class="form-label">Trạng Thái</label>
+            <select name="status" class="form-select" id="status" required>
+                <option th:each="status : ${statusList}" th:value="${status.name()}"
+                    th:text="${statusMap[status.name()]}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn trạng thái!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="appointmentTime" class="form-label">Thời Gian Đặt</label>
+            <input th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"  type="datetime-local" name="appointmentTime" class="form-control" id="appointmentTime" required>
+            <div class="invalid-feedback">Vui lòng chọn thời gian đặt!</div>
+        </div>
+
+        <div class="col-12">
+            <a href="/admin/reservation" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+
+            <button class="btn btn-primary" type="submit">Thêm</button>
+        </div>
+    </form>
+
+    <script src="/js/Table/table.js"></script>
+    <script>
+        const now = new Date();
+
+        const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+
+        const maxDate = new Date(now);
+        maxDate.setDate(maxDate.getDate() + 7);
+
+        document.getElementById('appointmentTime').min = minDate.toISOString().slice(0, 16);
+        document.getElementById('appointmentTime').max = maxDate.toISOString().slice(0, 16);
+
+        document.getElementById('appointmentTime').addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+
+            if (selectedDate.getTime() < now.getTime()) {
+                alert('Vui lòng chọn thời gian trong tương lai.');
+                this.value = '';
+            }
+
+            if (selectedDate.getTime() > maxDate.getTime() + 1000 * 60 * 60 * 24 * 7) {
+                alert('Chỉ được đặt bàn trong vòng 7 ngày kể từ ngày hiện tại.');
+                this.value = '';
+            }
+        });
+    </script>
+</body>

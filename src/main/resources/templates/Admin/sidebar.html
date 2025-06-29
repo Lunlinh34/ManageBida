@@ -1,0 +1,64 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">BI-A Admin <sup>2</sup></div>
+    </a>
+
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item" th:classappend="${page == 'Dashboard/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-heading">
+        Quản lý
+    </div>
+
+    <li class="nav-item" th:classappend="${page == 'Store/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/store">
+            <i class="fas fa-fw fa-store"></i>
+            <span>Quản lý cửa hàng</span></a>
+    </li>
+
+    <li class="nav-item" th:classappend="${page == 'Review/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/review">
+            <i class="fas fa-fw fa-star"></i>
+            <span>Quản lý đánh giá</span>
+        </a>
+    </li>
+    
+    <li class="nav-item" th:classappend="${page == 'Table/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/table">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Quản lý bàn</span></a>
+    </li>
+    <li class="nav-item" th:classappend="${page == 'Reservation/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/reservation">
+            <i class="fas fa-fw fa-calendar-check"></i>
+            <span>Quản lý đặt bàn</span></a>
+    </li>
+    <li class="nav-item" th:classappend="${page == 'Transaction/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/transaction">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Quản lý giao dịch</span></a>
+    </li>
+    <li class="nav-item" th:classappend="${page == 'Revenue/list' ? 'active' : ''}">
+        <a class="nav-link" href="/admin/revenue">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Quản lý doanh thu</span></a>
+    </li>
+
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>

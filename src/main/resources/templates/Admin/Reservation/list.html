@@ -1,0 +1,114 @@
+<div th:fragment="content" class="row">
+    <div class="col-lg-12">
+        <h1 class="mb-4">Quản lý đặt bàn bi-a</h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <a th:href="@{'/admin/reservation/create'}" class="btn btn-primary me-2" data-bs-toggle="tooltip" title="Thêm">
+                    <i class="bi bi-pencil-square"></i> Thêm
+                </a>
+                <form action="/admin/reservation" method="get" class="d-inline">
+                    <input type="text" name="search" placeholder="Tìm kiếm theo tên bàn hoặc khách hàng..." th:value="${search}" class="form-control d-inline" style="width: 500px;">
+                    <select name="status" class="form-select d-inline" style="width: 200px;">
+                        <option value="" th:selected="${status == ''}">Tất cả trạng thái</option>
+                        <option th:each="statused : ${statusList}" 
+                                th:value="${statused.name()}" 
+                                th:text="${statusMap[statused.name()]}" 
+                                th:selected="${statused.name() == status}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+                </form>
+            </div>
+        </div>
+
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên bàn</th>
+                    <th scope="col">Tên cửa hàng</th>
+                    <th scope="col">Tên khách hàng</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Thời gian đặt</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="reservation, iterStat : ${reservations}">
+                    <td th:text="${iterStat.count}"></td>
+                    <td th:text="${reservation.table.name}"></td>
+                    <td th:text="${reservation.table.store.name}"></td>
+                    <td th:text="${reservation.user.username + ' - ' + reservation.user.phoneNumber}"></td>
+                    <td th:text="${reservation.table.hourlyRate + ' VNĐ/h'}"></td>
+                    <td th:text="${statusMap[reservation.status.name]}"></td>
+                    <td th:text="${#temporals.format(reservation.appointmentTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <a th:href="@{'/admin/reservation/edit/' + ${reservation.id}}" class="btn btn-warning me-2" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                            <i class="bi bi-pencil-square"></i> Sửa
+                        </a>
+                        <a href="#" class="btn btn-danger"
+                           th:onclick="'if(confirm(\'Bạn có chắc chắn muốn xóa đặt bàn này?\')) { window.location.href=\'' + @{'/admin/reservation/delete/' + ${reservation.id}} + '\' }'"
+                           data-bs-toggle="tooltip" title="Xóa">
+                            <i class="bi bi-trash"></i> Xoá
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Phân trang" th:if="${totalPages > 0}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                        th:href="@{/admin/reservation(page=${currentPage - 1}, size=${size}, search=${search})}"
+                        aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:if="${currentPage > 2}">
+                    <a class="page-link" th:href="@{/admin/reservation(page=0, size=${size}, search=${search})}">1</a>
+                </li>
+
+                <li class="page-item disabled" th:if="${currentPage > 3}">
+                    <span class="page-link">...</span>
+                </li>
+
+                <li class="page-item" th:if="${currentPage > 0}">
+                    <a class="page-link"
+                        th:href="@{/admin/reservation(page=${currentPage - 1}, size=${size}, search=${search})}"
+                        th:text="${currentPage}"></a>
+                </li>
+
+                <li class="page-item active">
+                    <span class="page-link" th:text="${currentPage + 1}"></span>
+                </li>
+
+                <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                    <a class="page-link"
+                        th:href="@{/admin/reservation(page=${currentPage + 1}, size=${size}, search=${search})}"
+                        th:text="${currentPage + 2}"></a>
+                </li>
+
+                <li class="page-item disabled" th:if="${currentPage < totalPages - 4}">
+                    <span class="page-link">...</span>
+                </li>
+
+
+                <li class="page-item" th:if="${currentPage < totalPages - 3}">
+                    <a class="page-link"
+                        th:href="@{/admin/reservation(page=${totalPages - 1}, size=${size}, search=${search})}"
+                        th:text="${totalPages}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link"
+                        th:href="@{/admin/reservation(page=${currentPage + 1}, size=${size}, search=${search})}"
+                        aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

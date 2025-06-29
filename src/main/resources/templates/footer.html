@@ -1,0 +1,53 @@
+ <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">Về BidaClub</h4>
+                    <p class="text-white">Chúng tôi cung cấp dịch vụ bida chất lượng cao với không gian thoáng đãng, hiện đại và chuyên nghiệp.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">Liên kết nhanh</h4>
+                    <ul class="footer-links">
+                        <li><a href="/"><i class="fas fa-chevron-right me-2"></i>Trang chủ</a></li>
+                        <li><a href="/tables"><i class="fas fa-chevron-right me-2"></i>Đặt bàn</a></li>
+                        <li><a href="/promotions"><i class="fas fa-chevron-right me-2"></i>Khuyến mãi</a></li>
+                        <li><a href="/about"><i class="fas fa-chevron-right me-2"></i>Giới thiệu</a></li>
+                        <li><a href="/contact"><i class="fas fa-chevron-right me-2"></i>Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">Thông tin liên hệ</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ........</li>
+                        <li><i class="fas fa-phone me-2"></i> 0909090909</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@bidaclub.com</li>
+                        <li><i class="fas fa-clock me-2"></i> Mở cửa: 09:00 - 23:00 hàng ngày</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<button onclick="topFunction()" id="myBtn">
+    <img src="/images/up-arrow.png" alt="alternative">
+</button>
+
+<script src="/js/bootstrap.min.js"></script> 
+<script src="/js/swiper.min.js"></script>
+<script src="/js/purecounter.min.js"></script> 
+<script src="/js/replaceme.min.js"></script>
+<script src="/js/scripts.js"></script> 
+
+
+
+<script th:if="${page == 'profile'}" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script th:if="${page == 'profile'}" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:if="${page == 'profile'}" type="text/javascript">
+    console.log("Profile page loaded.");
+</script>

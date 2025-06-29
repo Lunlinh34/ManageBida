@@ -1,0 +1,75 @@
+<body th:fragment="content" xmlns="http://www.w3.org/1999/html">
+<h3>
+    Tạo bàn Bi-A
+</h3>
+<div class="text-success">
+    <hr>
+</div>
+
+<form class="row g-3 needs-validation" novalidate action="/admin/table/create" method="POST" enctype="multipart/form-data" onsubmit="return validateUniqueName()">
+    <div class="col-md-4">
+        <label for="name" class="form-label">Tên Bàn</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+        <div class="valid-feedback">Đã điền!</div>
+        <div class="invalid-feedback">Vui lòng nhập tên bàn!</div>
+        <div id="nameError" class="invalid-feedback" style="display:none;">Tên bàn đã tồn tại!</div>
+    </div>
+
+    <div class="col-md-4">
+        <label for="imageFile" class="form-label">Ảnh Bàn</label>
+        <input type="file" class="form-control" id="imageFile" name="imageFile" required>
+        <div class="invalid-feedback">Vui lòng thêm ảnh bàn!</div>
+    </div>
+
+    <div class="col-md-4">
+        <label for="status" class="form-label">Trạng Thái</label>
+        <select name="status" class="form-select" id="status" required>
+            <option th:each="status : ${statusList}" th:value="${status}" th:text="${statusMap[status.name()]}"></option>
+        </select>
+        <div class="invalid-feedback">Vui lòng chọn trạng thái!</div>
+    </div>
+
+    <div class="col-12">
+        <div class="col-md-4 form-check">
+            <input type="radio" value="0" class="form-check-input" id="normalTable" name="vip" checked required>
+            <label class="form-check-label" for="normalTable">Bàn Thường</label>
+        </div>
+        <div class="form-check col-md-4">
+            <input type="radio" value="1" class="form-check-input" id="vipTable" name="vip" required>
+            <label class="form-check-label" for="vipTable">Bàn Vip</label>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <label for="category" class="form-label">Loại</label>
+        <select name="categoryTable" class="form-select" id="category" required>
+            <option th:each="category : ${categoryList}" th:value="${category}" th:text="${categoryMap[category.name()]}"></option>
+        </select>
+        <div class="invalid-feedback">Vui lòng chọn loại bàn!</div>
+    </div>
+
+    <div class="col-md-4">
+        <label for="hourlyRate" class="form-label">Giá Theo Giờ</label>
+        <input type="number" class="form-control" id="hourlyRate" name="hourlyRate" step="0.01" min="0" required>
+        <div class="invalid-feedback">Vui lòng nhập giá theo giờ!</div>
+    </div>
+    <div class="col-md-4">
+        <label for="store" class="form-label">Cửa hàng</label>
+        <select name="store" class="form-select" id="store" required>
+            <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"></option>
+        </select>
+        <div class="invalid-feedback">Vui lòng chọn cửa hàng!</div>
+    </div>
+    <div class="col-12">
+        <a href="/admin/table" class="btn btn-secondary me-2">
+            <i class="bi bi-arrow-left-circle"></i> Quay lại
+        </a>
+
+        <button class="btn btn-primary" type="submit">Thêm</button>
+    </div>
+</form>
+
+<script src="/js/Table/table.js"></script>
+</body>
+
+

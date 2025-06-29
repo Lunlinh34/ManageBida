@@ -1,0 +1,46 @@
+<body th:fragment="content">
+    <h3>
+        Sửa đánh giá
+    </h3>
+    <div class="text-success">
+        <hr>
+    </div>
+    <form class="row g-3 needs-validation" novalidate action="/admin/review/update" method="POST"
+        enctype="multipart/form-data" onsubmit="return validateForm()">
+
+        <input type="hidden" name="id" th:value="${review.id}">
+        <div class="col-md-4">
+            <label for="user" class="form-label">Tên người dùng</label>
+            <select class="form-control" id="user" name="user" required>
+                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.fullname}"
+                    th:selected="${user.id == review.user.id}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="store" class="form-label">Tên cửa hàng</label>
+            <select class="form-control" id="store" name="store" required>
+                <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"
+                    th:selected="${store.id == review.store.id}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="rating" class="form-label">Đánh giá</label>
+            <select class="form-control" id="rating" name="rating" required>
+                <option th:each="r : ${#numbers.sequence(1, 5)}" th:value="${r}" th:text="${r}"
+                    th:selected="${r == review.rating}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="comment" class="form-label">Bình luận</label>
+            <textarea class="form-control" id="comment" name="comment" required th:text="${review.comment}"></textarea>
+        </div>
+
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Quay lại</button>
+
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+
+
+    </form>
+</body>

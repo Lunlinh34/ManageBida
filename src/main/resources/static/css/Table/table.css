@@ -1,0 +1,5 @@
+.heading_table {
+    display: flex;
+    justify-content: end;
+    padding: 12px 0;
+}

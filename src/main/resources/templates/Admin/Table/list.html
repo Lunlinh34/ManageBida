@@ -1,0 +1,55 @@
+<div th:fragment="content" class="row">
+    <div class="col-lg-12">
+        <h1>Quản lý bàn bi-a</h1>
+        <div class="heading_table">
+            <a th:href="@{'/admin/table/create'}" class="btn btn-primary me-2"
+           data-bs-toggle="tooltip" title="Chỉnh sửa">
+            <i class="bi bi-pencil-square"></i>
+            Thêm
+        </a>
+        </div>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên bàn</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">VIP</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Giá theo giờ</th>
+                    <th scope="col">Cửa hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="table, iterStat : ${tables}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${table.name}"></td>
+                <td>
+                    <img th:src="${table.image}" alt="image" style="width: 100px; height: 100px;">
+                </td>
+                <td th:text="${table.isVip ? 'Bàn VIP' : 'Bàn Thường'}"></td>
+                <td th:text="${categoryMap[table.categoryTable.name]}"></td>
+                <td th:text="${#numbers.formatDecimal(table.hourlyRate, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                <td th:text="${table.store.name}"></td>
+                <td th:text="${statusMap[table.status.name]}"></td>
+                <td>
+                    <a th:href="@{'/admin/table/edit/' + ${table.id}}" class="btn btn-warning me-2"
+                       data-bs-toggle="tooltip" title="Chỉnh sửa">
+                        <i class="bi bi-pencil-square"></i>
+                        Sửa
+                    </a>
+                    <a href="#" class="btn btn-danger"
+                       th:onclick="'if(confirm(\'Bạn có chắc chắn muốn xóa bàn này?\')) { window.location.href=\'' + @{'/admin/table/delete/' + ${table.id}} + '\' }'"
+                       data-bs-toggle="tooltip" title="Xóa">
+                        <i class="bi bi-trash"></i>
+                        Xoá
+                    </a>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+<body th:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Nhập Thông Tin Đặt Bàn</h4>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                            <span th:text="${errorMessage}"></span>
+                        </div>
+                        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                            <span th:text="${successMessage}"></span>
+                        </div>
+                        <form action="/booking/create" method="post">
+                            <input type="hidden" name="table" th:value="${table.id}" id="table">
+                            <input type="hidden" name="user" th:value="${user.id}" id="user">
+                            <input type="hidden" name="status" th:value="PENDING">
+
+
+                            <div class="form-group mb-4">
+                                <label for="tableType">Loại bàn</label>
+                                <input type="text" class="form-control" id="tableType" name="tableType"
+                                    th:value="${table.isVip ? 'Bàn VIP' : 'Bàn Thường'}" readonly>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="tableId">Bàn</label>
+                                <input type="text" class="form-control" id="tableId" name="tableId"
+                                    th:value="${table.name}" readonly>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="storeName">Tên cửa hàng</label>
+                                <input type="text" class="form-control" id="storeName" name="storeName"
+                                    th:value="${table.store.name}" readonly>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="storeAddress">Địa chỉ cửa hàng</label>
+                                <input type="text" class="form-control" id="storeAddress" name="storeAddress"
+                                    th:value="${table.store.address}" readonly>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="storePhone">Số điện thoại cửa hàng</label>
+                                <input type="text" class="form-control" id="storePhone" name="storePhone"
+                                    th:value="${table.store.phone}" readonly>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="hourlyRate">Giá 1H</label>
+                                <input type="text" class="form-control" id="hourlyRate" name="hourlyRate"
+                                    th:value="${#numbers.formatDecimal(table.hourlyRate, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                                    readonly>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="customerName">Tên khách hàng</label>
+                                <input type="text" class="form-control" id="customerName" name="customerName"
+                                    th:value="${user.fullname}" readonly>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="phoneNumber">Số điện thoại</label>
+                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                                    th:value="${user.phoneNumber}" readonly>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="appointmentTime">Ngày đặt bàn</label>
+                                <input type="datetime-local" class="form-control" id="appointmentTime"
+                                    th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
+                                    name="appointmentTime" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Đặt bàn</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Hủy
+                                bỏ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const now = new Date();
+
+        const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+
+        const maxDate = new Date(now);
+        maxDate.setDate(maxDate.getDate() + 7);
+
+        document.getElementById('appointmentTime').min = minDate.toISOString().slice(0, 16);
+        document.getElementById('appointmentTime').max = maxDate.toISOString().slice(0, 16);
+
+        document.getElementById('appointmentTime').addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+
+            if (selectedDate.getTime() < now.getTime()) {
+                alert('Vui lòng chọn thời gian trong tương lai.');
+                this.value = '';
+            }
+
+            if (selectedDate.getTime() > maxDate.getTime() + 1000 * 60 * 60 * 24 * 7) {
+                alert('Chỉ được đặt bàn trong vòng 7 ngày kể từ ngày hiện tại.');
+                this.value = '';
+            }
+        });
+    </script>
+</body>

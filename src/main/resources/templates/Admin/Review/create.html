@@ -1,0 +1,84 @@
+<body th:fragment="content" xmlns="http://www.w3.org/1999/html">
+    <h3>
+        Tạo đánh giá
+    </h3>
+    <div class="text-success">
+        <hr>
+    </div>
+    
+    <form class="row g-3 needs-validation" novalidate action="/admin/review/save" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="col-md-4">
+            <label for="user" class="form-label">Tên người dùng</label>
+            <select class="form-control" id="user" name="user" required>
+                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.fullname}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn người dùng!</div>
+        </div>
+    
+        <div class="col-md-4">
+            <label for="store" class="form-label">Tên cửa hàng</label>
+            <select class="form-control" id="store" name="store" required>
+                <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn cửa hàng!</div>
+        </div>
+    
+        <div class="col-md-4">
+            <label for="rating" class="form-label">Đánh giá</label>
+            <select class="form-control" id="rating" name="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+    
+        <div class="col-md-4">
+            <label for="comment" class="form-label">Bình luận</label>
+            <textarea class="form-control" id="comment" name="comment" required></textarea>
+            <div class="invalid-feedback">Vui lòng nhập bình luận!</div>
+        </div>
+    
+    
+        <div class="col-12">
+            <a href="/admin/review" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+    
+            <button class="btn btn-primary" type="submit">Thêm</button>
+        </div>
+    </form>
+    
+    <script>
+        function validateForm() {
+            let isValid = true;
+            const name = document.getElementById('name');
+            const address = document.getElementById('address');
+            const comment = document.getElementById('comment');
+
+            if (name.value === '') {
+                isValid = false;
+                name.classList.add('is-invalid');
+            } else {
+                name.classList.remove('is-invalid');
+            }
+
+            if (address.value === '') {
+                isValid = false;
+                address.classList.add('is-invalid');
+            } else {
+                address.classList.remove('is-invalid');
+            }
+
+            if (comment.value === '') {
+                isValid = false;
+                comment.classList.add('is-invalid');
+            } else {
+                comment.classList.remove('is-invalid');
+            }
+
+            return isValid;
+        }
+    </script>
+    </body>

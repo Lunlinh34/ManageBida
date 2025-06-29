@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/css/Infor/index.css">
+</head>
+
+<body>
+    <div class="collection-container d-flex justify-content-center align-items-center p-5 gap-5">
+        <div class="collection-image w-50">
+            <img class="w-100" src="/images/infor.jpg" alt="Collection Image">
+        </div>
+        <div class="collection-content w-50">
+            <h1>ADORABLE DREAMS</h1>
+            <p>This collection brings together Levents' dreamy spirit with Hello Kitty's timeless adorableness. Designed
+                for dreamers who find beauty in the little things, it serves as a gentle reminder that love, friendship,
+                and imagination are the true colors of life.</p>
+            <p>Step into a world where every piece tells a story of dreams, and every moment radiates cuteness. Be part
+                of a journey that inspires you to dream boldly and love endlessly.</p>
+            <button class="primary" onclick="window.location.href='/booking'">XEM THÊM</button>
+        </div>
+    </div>
+
+    <div class="testimonials-section">
+        <div class="section-header">
+            <h2>Đánh giá cửa hàng</h2>
+            <p class="subtitle">Nhận xét từ cộng đồng</p>
+        </div>
+
+        <div class="testimonials-container">
+            <div th:each="review : ${reviews}">
+                <div class="testimonial-card">
+                    <div class="quote-icon">❝</div>
+                    <p class="testimonial-text" th:text="${review.comment}"></p>
+                    <div class="testimonial-author">
+                        <p class="author-store" th:text="'Cửa hàng: ' + ${review.store.name}"></p>
+                    </div>
+                    <div class="testimonial-author">
+                        <p class="author-name" th:text="'Người dùng: ' + ${review.user.username}"></p>
+                    </div>
+                    
+                    <div class="testimonial-author">
+                        <p class="rating">
+                            <span th:text="'Xếp hạng:'"></span>
+                            <span th:each="i : ${#numbers.sequence(1, review.rating)}" class="filled">★</span>
+                        </p>
+                    </div>
+
+                    <div class="testimonial-author">
+                        <p class="testimonial-date" th:text="'Ngày đánh giá: ' + ${#temporals.format(review.createdAt, 'dd/MM/yyyy')}"></p>
+                    </div>
+             
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <script src="/js/Infor/index.js"></script>
+</body>
+
+</html>

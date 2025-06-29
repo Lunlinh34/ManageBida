@@ -1,0 +1,51 @@
+<div th:fragment="content" class="row">
+    <div class="col-lg-12">
+        <h1>Quản lý giao dịch</h1>
+        <div class="heading_table">
+            <a th:href="@{'/admin/transaction/create'}" class="btn btn-primary me-2"
+           data-bs-toggle="tooltip" title="Chỉnh sửa">
+            <i class="bi bi-pencil-square"></i>
+            Thêm
+        </a>
+        </div>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên bàn</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Thời gian bắt đầu</th>
+                    <th scope="col">Thời gian kết thúc</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="transaction, iterStat : ${transactions}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${transaction.reservation.table.name + ' - ' + transaction.reservation.user.username}"></td>
+                <td th:text="${statusPayMap[transaction.status.name]}"></td>
+                <td th:text="${#temporals.format(transaction.startDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${transaction.endDate != null ? #temporals.format(transaction.endDate, 'dd/MM/yyyy HH:mm') : ''}"></td>
+                <td th:text="${transaction.endDate != null ? 
+                    (transaction.reservation.table.hourlyRate/60 * T(java.time.Duration).between(transaction.startDate, transaction.endDate).toMinutes() + ' VNĐ') : 
+                    '0 VNĐ'}"></td>
+                <td>
+                    <a th:href="@{'/admin/transaction/edit/' + ${transaction.id}}" class="btn btn-warning me-2"
+                       data-bs-toggle="tooltip" title="Chỉnh sửa">
+                        <i class="bi bi-pencil-square"></i>
+                        Sửa
+                    </a>
+                    <!-- <a href="#" class="btn btn-danger"
+                       th:onclick="'if(confirm(\'Bạn có chắc chắn muốn xóa giao dịch này?\')) { window.location.href=\'' + @{'/admin/transaction/delete/' + ${transaction.id}} + '\' }'"
+                       data-bs-toggle="tooltip" title="Xóa">
+                        <i class="bi bi-trash"></i>
+                        Xoá
+                    </a> -->
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

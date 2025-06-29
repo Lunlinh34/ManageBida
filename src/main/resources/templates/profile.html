@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Hồ sơ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+</head>
+
+<body>
+    <div th:replace="~{header}"></div>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css"
+        integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <div class="container" style="margin-top: 100px;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <div class="text-center border-end">
+                                    <img src="images/avatar_default.avif"
+                                        class="img-fluid avatar-xxl rounded-circle" alt="">
+                                    <h4 class="text-primary font-size-20 mt-3 mb-2">Tên</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="ms-3">
+                                    <div>
+                                        <h4 class="card-title mb-2">Tên</h4>
+                                        <p class="mb-0 text-muted">Chào mừng đến với tôi!</p>
+                                    </div>
+                                    <div class="row my-4">
+                                        <div class="col-md-12">
+                                            <div>
+                                                <p class="text-muted mb-2 fw-medium"><i
+                                                        class="mdi mdi-email-outline me-2"></i><a
+                                                        href="#" class="__cf_email__"
+                                                        data-cfemail="a3e9c2cdd0cbd4c6cfcfd0e3d3d1ccc1cac08dc0ccce">[email&#160]</a>
+                                                </p>
+                                                <p class="text-muted fw-medium mb-0"><i
+                                                        class="mdi mdi-phone-in-talk-outline me-2"></i>0816734234
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="card">
+                    <div class="tab-content p-4">
+                        <div class="tab-pane active show" id="team-tab" role="tabpanel">
+                            <h4 class="card-title mb-4"></h4>
+                            <div class="row">
+                               
+
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{footer}"></div>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<div th:fragment="content">
+    <div class="container-fluid py-2">
+        <div class="row justify-content-center">
+            <div class="btn-group me-2 mb-4">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btnMonth" onclick="switchView('month')">
+                    <i class="fas fa-calendar-alt me-1"></i>Tháng
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btnDay" onclick="switchView('day')">
+                    <i class="fas fa-calendar-day me-1"></i>Ngày
+                </button>
+            </div>
+            <div class="col-md-9">
+                <div class="card shadow-sm rounded-3 border-0">
+                    <div class="card-header bg-gradient-primary text-white border-0 py-2">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Biểu Đồ Doanh Thu</h6>
+                            </div>
+                            <div class="col-auto">
+                                <select id="chartType" class="form-select form-select-sm py-0" style="font-size: 0.8rem;" onchange="updateChartType()">
+                                    <option value="bar">Biểu đồ cột</option>
+                                    <option value="line">Biểu đồ đường</option>
+                                    <option value="pie">Biểu đồ tròn</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <canvas id="revenueChart" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function switchView(view) {
+            window.location.href = `/admin/dashboard?view=${view}`;
+        }
+    </script>
+    <script th:inline="javascript">
+        let revenueChart;
+        const monthlyData = /*[[${monthlyRevenue}]]*/ [];
+        console.log(monthlyData);
+        const chartData = {
+            labels: monthlyData.map(item => item.month),
+            datasets: [{
+                label: 'Doanh thu (VNĐ)',
+                data: monthlyData.map(item => item.total),
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 10
+                        },
+                        boxWidth: 10
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Thống kê doanh thu theo tháng',
+                    font: {
+                        size: 12
+                    },
+                    padding: {
+                        bottom: 5
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 10
+                    },
+                    bodyFont: {
+                        size: 10
+                    },
+                    padding: 8
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 10
+                        },
+                        callback: function(value) {
+                            return new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                                notation: 'compact',
+                                maximumFractionDigits: 0
+                            }).format(value);
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        };
+
+        function initChart(type = 'bar') {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+            
+            if (type === 'pie') {
+                delete chartOptions.scales;
+            } else {
+                chartOptions.scales = {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND',
+                                    maximumFractionDigits: 0
+                                }).format(value);
+                            }
+                        }
+                    }
+                };
+            }
+
+            revenueChart = new Chart(ctx, {
+                type: type,
+                data: chartData,
+                options: chartOptions
+            });
+        }
+
+        function updateChartType() {
+            const newType = document.getElementById('chartType').value;
+            initChart(newType);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+        });
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name) || 'month';
+        }
+
+        const currentView = getUrlParameter('view');
+        document.getElementById('btnMonth').classList.toggle('btn-primary', currentView === 'month');
+        document.getElementById('btnMonth').classList.toggle('btn-outline-primary', currentView !== 'month');
+        document.getElementById('btnDay').classList.toggle('btn-primary', currentView === 'day');
+        document.getElementById('btnDay').classList.toggle('btn-outline-primary', currentView !== 'day');
+
+        chartOptions.plugins.title.text = currentView === 'month' ? 
+            'Thống kê doanh thu theo tháng' : 
+            'Thống kê doanh thu theo ngày';
+    </script>
+</div>

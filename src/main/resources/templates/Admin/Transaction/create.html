@@ -1,0 +1,73 @@
+<body th:fragment="content" xmlns="http://www.w3.org/1999/html">
+    <h3>
+        Tạo giao dịch
+    </h3>
+    <div class="text-success">
+        <hr>
+    </div>
+    
+    <form class="row g-3 needs-validation" novalidate action="/admin/transaction/create" method="POST">
+    
+        <div class="col-md-4">
+            <label for="reservation" class="form-label">Tên Đặt Bàn</label>
+            <select name="reservation" class="form-select" id="reservation" required>
+                <option th:each="reservation : ${reservations}" th:value="${reservation.id}" th:text="${reservation.table.name}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn đặt bàn!</div>
+        </div>
+    
+        <div class="col-md-4">
+            <label for="status" class="form-label">Trạng Thái</label>
+            <select name="status" class="form-select" id="status" required>
+                <option th:each="status : ${statusPayList}" 
+                        th:value="${status.name()}" 
+                        th:text="${statusPayMap[status.name()]}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn trạng thái!</div>
+        </div>
+        <div class="col-md-4">
+            <label for="startDate" class="form-label">Thời Gian Bắt Đầu</label>
+            <input type="datetime-local" name="startDate" class="form-control" id="startDate" required>
+            <div class="invalid-feedback">Vui lòng chọn thời gian bắt đầu!</div>
+        </div>
+        <div class="col-md-4">
+            <label for="endDate" class="form-label">Thời Gian Kết Thúc</label>
+            <input type="datetime-local" name="endDate" class="form-control" id="endDate" required>
+            <div class="invalid-feedback">Vui lòng chọn thời gian kết thúc!</div>
+        </div>
+    
+        <div class="col-12">
+            <a href="/admin/reservation" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+    
+            <button class="btn btn-primary" type="submit">Thêm</button>
+        </div>
+    </form>
+    
+    <script src="/js/Reservation/reservation.js"></script>
+
+    <script>
+        const now = new Date();
+        const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()); // Current date and time
+        const maxDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 0);
+        document.getElementById('startDate').min = minDate.toISOString().slice(0, 16);
+        document.getElementById('endDate').min = minDate.toISOString().slice(0, 16);
+
+        document.getElementById('startDate').addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+            if (selectedDate.getTime() < now.getTime()) {
+                alert('Vui lòng chọn thời gian trong tương lai.');
+                this.value = '';
+            }
+        });
+        document.getElementById('endDate').addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+            if (selectedDate.getTime() < now.getTime()) {
+                alert('Vui lòng chọn thời gian trong tương lai.');
+                this.value = '';
+            }
+        });
+    </script>
+    </body>
+    

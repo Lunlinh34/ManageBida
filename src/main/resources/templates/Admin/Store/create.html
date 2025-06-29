@@ -1,0 +1,121 @@
+<body th:fragment="content" xmlns="http://www.w3.org/1999/html">
+    <h3>
+        Tạo cửa hàng
+    </h3>
+    <div class="text-success">
+        <hr>
+    </div>
+
+    <form class="row g-3 needs-validation" novalidate action="/admin/store/create" method="POST"
+        enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="col-md-4">
+            <label for="name" class="form-label">Tên </label>
+            <input type="text" class="form-control" id="name" name="name" required>
+            <div class="valid-feedback">Đã điền!</div>
+            <div class="invalid-feedback">Vui lòng nhập tên cửa hàng!</div>
+            <div id="nameError" class="invalid-feedback" style="display:none;">Tên cửa hàng đã tồn tại!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="address" class="form-label">Địa Chỉ</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+            <div class="invalid-feedback">Vui lòng nhập địa chỉ cửa hàng!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="phone" class="form-label">Số Điện Thoại</label>
+            <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,11}">
+            <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (10-11 số)!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="invalid-feedback">Vui lòng nhập email hợp lệ!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="imageFile" class="form-label">Ảnh</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+            <div class="invalid-feedback">Vui lòng chọn ảnh cửa hàng!</div>
+        </div>
+
+
+        <div class="col-12">
+            <a href="/admin/store" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+
+            <button class="btn btn-primary" type="submit">Thêm</button>
+        </div>
+    </form>
+
+    <script>
+
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        async function checkNameExists(name) {
+            try {
+                const response = await fetch(`/api/store/check-name?name=${encodeURIComponent(name)}`);
+                const data = await response.json();
+                return data.exists;
+            } catch (error) {
+                console.error("Lỗi kiểm tra tên:", error);
+                return false;
+            }
+        }
+
+        async function validateForm() {
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('nameError');
+
+            if (nameInput.value.trim() === '') {
+                nameInput.setCustomValidity('Vui lòng nhập tên cửa hàng!');
+                return false;
+            }
+
+            const nameExists = await checkNameExists(nameInput.value);
+            if (nameExists) {
+                nameError.style.display = 'block';
+                nameInput.setCustomValidity('Tên cửa hàng đã tồn tại!');
+                return false;
+            } else {
+                nameError.style.display = 'none';
+                nameInput.setCustomValidity('');
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailInput.setCustomValidity('Email không hợp lệ!');
+                return false;
+            } else {
+                emailInput.setCustomValidity('');
+            }
+
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (!phoneRegex.test(phoneInput.value)) {
+                phoneInput.setCustomValidity('Số điện thoại không hợp lệ (10-11 số)!');
+                return false;
+            } else {
+                phoneInput.setCustomValidity('');
+            }
+
+            return true;
+        }
+    </script>
+</body>

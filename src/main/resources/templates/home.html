@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Trang chủ</title>
+    <link href="/css/Home/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<body>
+
+    <div th:replace="~{header}"></div>
+    <div style="margin-top: 100px;">
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"
+            style="text-align: center; margin-top: 20px;"></div>
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"
+            style="text-align: center; margin-top: 20px;"></div>
+
+        <div th:replace="~{/User/layout}"></div>
+        <div th:replace="~{/User/infor}"></div>
+    </div>
+
+    <div th:replace="~{footer}"></div>
+
+    <script>
+        setTimeout(function() {
+            var errorAlert = document.querySelector('.alert-danger');
+            var successAlert = document.querySelector('.alert-success');
+            if (errorAlert) {
+                errorAlert.style.display = 'none';
+            }
+            if (successAlert) {
+                successAlert.style.display = 'none';
+            }
+        }, 2000);
+    </script>
+
+</body>
+
+</html>

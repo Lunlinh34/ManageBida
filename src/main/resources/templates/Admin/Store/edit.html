@@ -1,0 +1,47 @@
+<body th:fragment="content">
+    <h3>Chỉnh sửa cửa hàng</h3>
+    <div class="text-success"><hr></div>
+    
+    <form class="row g-3 needs-validation" novalidate 
+          th:action="@{'/admin/store/update'}" 
+          method="POST">
+        <input type="hidden" name="id" th:value="${store.id}">
+        <div class="col-md-4">
+            <label for="name" class="form-label">Tên Cửa Hàng</label>
+            <input type="text" class="form-control" id="name" name="name" th:value="${store.name}" required>
+            <div class="invalid-feedback">Vui lòng nhập tên cửa hàng!</div>
+        </div>
+    
+        <div class="col-md-4">
+            <label for="address" class="form-label">Địa Chỉ</label>
+            <input type="text" class="form-control" id="address" name="address" th:value="${store.address}" required>
+            <div class="invalid-feedback">Vui lòng nhập địa chỉ cửa hàng!</div>
+        </div>
+    
+    
+        <div class="col-md-4">
+            <label for="phone" class="form-label">Số Điện Thoại</label>
+            <input type="text" class="form-control" id="phone" name="phone" th:value="${store.phone}" required>
+            <div class="invalid-feedback">Vui lòng nhập số điện thoại!</div>
+        </div>
+        
+        <div class="col-md-4">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" th:value="${store.email}" required>
+            <div class="invalid-feedback">Vui lòng nhập email!</div>
+        </div>
+        
+        <div class="col-md-4">  
+            <label for="imageFile" class="form-label">Ảnh</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+            <div class="invalid-feedback">Vui lòng chọn ảnh cửa hàng!</div>
+        </div>
+
+        <div class="col-12">
+            <a href="/admin/store" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+            <button class="btn btn-primary" type="submit">Cập nhật</button>
+        </div>
+    </form>
+    </body> 

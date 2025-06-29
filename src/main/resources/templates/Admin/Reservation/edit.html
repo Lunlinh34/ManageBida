@@ -1,0 +1,80 @@
+<body th:fragment="content">
+    <h3>Chỉnh sửa đặt bàn</h3>
+    <div class="text-success">
+        <hr>
+    </div>
+
+    <form class="row g-3 needs-validation" novalidate th:action="@{'/admin/reservation/update'}" method="POST">
+        <input type="hidden" name="id" th:value="${reservation.id}">
+        <div class="col-md-4">
+            <label for="user" class="form-label">Tên Khách Hàng</label>
+            <select name="user" class="form-select" id="user" required>
+                <option th:each="user : ${users}" th:value="${user.id}"
+                    th:text="${user.username + ' - ' + user.phoneNumber}"
+                    th:selected="${user.id == reservation.user.id}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng nhập tên khách hàng!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="table" class="form-label">Tên Bàn</label>
+            <select name="table" class="form-select" id="table" required>
+                <option th:each="table : ${tables}" th:value="${table.id}" th:text="${table.name}"
+                    th:selected="${table.id == reservation.table.id}"></option>
+            </select>
+            <div class="invalid-feedback">Vui lòng nhập tên bàn!</div>
+        </div>
+
+
+        <div class="col-md-4">
+            <label for="status" class="form-label">Trạng Thái</label>
+            <select name="status" class="form-select" id="status" required>
+                <option th:each="status : ${statusList}" th:value="${status.name()}"
+                    th:text="${statusMap[status.name()]}" th:selected="${status.name() == reservation.status.name()}">
+                </option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn trạng thái!</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="appointmentTime" class="form-label">Thời Gian Đặt</label>
+            <input type="datetime-local" name="appointmentTime" class="form-control" id="appointmentTime"
+                th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}" required>
+
+            <div class="invalid-feedback">Vui lòng chọn thời gian đặt!</div>
+        </div>
+
+        <div class="col-12">
+            <a href="/admin/reservation" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+            <button class="btn btn-primary" type="submit">Cập nhật</button>
+        </div>
+    </form>
+
+    <script>
+        const now = new Date();
+
+        const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+
+        const maxDate = new Date(now);
+        maxDate.setDate(maxDate.getDate() + 7);
+
+        document.getElementById('appointmentTime').min = minDate.toISOString().slice(0, 16);
+        document.getElementById('appointmentTime').max = maxDate.toISOString().slice(0, 16);
+
+        document.getElementById('appointmentTime').addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+
+            if (selectedDate.getTime() < now.getTime()) {
+                alert('Vui lòng chọn thời gian trong tương lai.');
+                this.value = '';
+            }
+
+            if (selectedDate.getTime() > maxDate.getTime() + 1000 * 60 * 60 * 24 * 7) {
+                alert('Chỉ được đặt bàn trong vòng 7 ngày kể từ ngày hiện tại.');
+                this.value = '';
+            }
+        });
+    </script>
+</body>
